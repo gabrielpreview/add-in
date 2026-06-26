@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caspra Viewer — Instalação</title>
+<style>
+  :root{
+    --bg:#ffffff;--panel:#f6f7f9;--line:#e1e4e8;--line-strong:#cfd4da;
+    --text:#1b1f24;--muted:#5c636e;--accent:#0a6cff;--accent-line:#0a6cff;
+    --code-bg:#f3f4f6;--code-text:#24292f;--ok-bg:#eef7f0;--ok-line:#86c79a;
+    --ui-bg:#eef3ff;--ui-line:#d2e0ff;--ui-text:#0a3d91;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font:15px/1.65 "Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- HOME ---------- */
+  #home{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px 20px}
+  .home-card{
+    width:100%;max-width:560px;border:1px solid var(--line);border-radius:12px;
+    background:var(--bg);padding:34px 34px 30px;box-shadow:0 1px 2px rgba(0,0,0,.04);
+  }
+  .home-brand{
+    font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    color:var(--accent);margin-bottom:14px;
+  }
+  .home-card h1{font-size:23px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+  .home-desc{margin:0 0 18px;font-size:14.5px;line-height:1.55;border:1px solid var(--line);border-left:3px solid var(--accent-line);background:var(--panel);border-radius:5px;padding:12px 15px}
+  .home-desc b{font-weight:600}
+  .home-intro{color:var(--muted);margin:0 0 24px;font-size:14.5px}
+  .field{margin:0 0 20px}
+  .field label{display:block;font-weight:600;font-size:14px;margin-bottom:3px}
+  .field-help{margin:0 0 9px;color:var(--muted);font-size:13px;line-height:1.5}
+  select{
+    width:100%;font:inherit;font-size:15px;color:var(--text);background:var(--bg);
+    border:1px solid var(--line-strong);border-radius:7px;padding:10px 12px;cursor:pointer;
+    appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path d='M2 4l4 4 4-4' fill='none' stroke='%235c636e' stroke-width='1.6'/></svg>");
+    background-repeat:no-repeat;background-position:right 12px center;
+  }
+  select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(10,108,255,.15)}
+  .home-example{
+    border:1px solid var(--line);border-left:3px solid var(--accent-line);
+    background:var(--panel);border-radius:5px;padding:12px 15px;
+    font-size:13.5px;color:var(--muted);margin:4px 0 26px;
+  }
+  .start-btn{
+    width:100%;border:0;border-radius:8px;background:var(--accent);color:#fff;
+    font:600 15.5px "Segoe UI",sans-serif;padding:13px 16px;cursor:pointer;
+  }
+  .start-btn:hover{background:#0a5ce0}
+
+  /* ---------- GUIDE CHROME ---------- */
+  .topbar{border-bottom:1px solid var(--line);background:var(--bg)}
+  .topbar .inner{
+    max-width:1080px;margin:0 auto;padding:11px 28px;
+    display:flex;align-items:center;gap:9px;font-size:13px;color:var(--muted);flex-wrap:wrap;
+  }
+  .topbar strong{color:var(--text);font-weight:600}
+  .topbar .sep{color:var(--line-strong)}
+  .change-btn{
+    border:1px solid var(--line);background:var(--bg);color:var(--text);
+    font:inherit;font-size:12.5px;border-radius:6px;padding:5px 11px;cursor:pointer;
+  }
+  .change-btn:hover{background:var(--panel)}
+  .langtag{margin-left:auto;font-size:12.5px;color:var(--muted)}
+  .langtag b{color:var(--text);font-weight:600}
+
+  .layout{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:232px 1fr;align-items:start}
+  nav.toc{position:sticky;top:0;align-self:start;padding:34px 22px 34px 28px;border-right:1px solid var(--line);font-size:13.5px}
+  nav.toc .lbl{text-transform:uppercase;letter-spacing:.06em;font-size:11px;font-weight:700;color:var(--muted);margin:0 0 12px}
+  nav.toc ol{list-style:none;margin:0;padding:0}
+  nav.toc a{display:block;padding:6px 10px;border-radius:5px;color:var(--text);border-left:2px solid transparent}
+  nav.toc a:hover{background:var(--panel);text-decoration:none}
+
+  main{padding:34px 40px 80px;min-width:0}
+  h1{font-size:27px;line-height:1.3;margin:0 0 8px;font-weight:600;letter-spacing:-.01em}
+  .lede{color:var(--muted);margin:0 0 18px;font-size:15px}
+  .factbar{display:flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:0 0 28px}
+  .factbar div{padding:10px 16px;font-size:13px;color:var(--muted);border-right:1px solid var(--line)}
+  .factbar div:last-child{border-right:0}
+  .factbar b{color:var(--text);font-weight:600}
+  .note{border:1px solid var(--line);border-left:3px solid var(--accent-line);background:var(--panel);border-radius:5px;padding:13px 16px;margin:0 0 26px;font-size:14px}
+  .note .h{font-weight:600;display:block;margin-bottom:2px}
+  .note p{margin:0}
+
+  .block{border:1px solid var(--line);border-left:3px solid var(--accent-line);border-radius:8px;padding:0 22px 20px;margin:20px 0 0;scroll-margin-top:18px}
+  h2.step{font-size:17px;font-weight:600;margin:0 -22px 0;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--panel);border-radius:0 8px 0 0;display:flex;align-items:center;gap:12px}
+  h2.step .n{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 9px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;border-radius:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  ol.steps{margin:14px 0 0;padding-left:22px}
+  ol.steps>li{margin:8px 0;padding-left:4px}
+  ol.steps>li::marker{color:var(--muted);font-variant-numeric:tabular-nums}
+  main p{margin:14px 0 0}
+  .sub{color:var(--muted);font-size:13.5px;margin-top:8px}
+
+  kbd{font-family:inherit;font-size:12px;font-weight:600;background:#fff;border:1px solid var(--line-strong);border-bottom-width:2px;border-radius:4px;padding:1px 6px;white-space:nowrap}
+  code{font-family:"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace;background:var(--code-bg);border:1px solid var(--line);border-radius:4px;padding:.5px 5px;font-size:13px;color:var(--code-text)}
+  .ui{background:var(--ui-bg);border:1px solid var(--ui-line);color:var(--ui-text);border-radius:4px;padding:.5px 6px;font-weight:600;font-size:13.5px;white-space:nowrap}
+  .path{display:flex;align-items:stretch;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin:12px 0 0;max-width:420px;font-family:"Cascadia Code",Consolas,"Liberation Mono",Menlo,monospace}
+  .path .val{padding:9px 13px;font-size:13.5px;color:var(--code-text);background:var(--code-bg);flex:1;white-space:nowrap;overflow-x:auto}
+  .path button{border:0;border-left:1px solid var(--line);background:#fff;color:var(--muted);padding:0 14px;font:600 12px/1 "Segoe UI",sans-serif;cursor:pointer;white-space:nowrap}
+  .path button:hover{background:var(--panel);color:var(--text)}
+  .path button.done{color:#1a7f43}
+  .dlbtn{display:inline-flex;align-items:center;gap:8px;margin:12px 0 2px;text-decoration:none;background:var(--ui-bg);border:1px solid var(--accent);color:var(--accent);font-weight:600;font-size:13.5px;border-radius:7px;padding:9px 14px}
+  .dlbtn:hover{background:var(--accent);color:#fff;text-decoration:none}
+  .dlbtn code{background:transparent;border:0;color:inherit;font-size:13px;padding:0}
+  .dlicon{font-size:16px;line-height:1}
+
+  .result{border:1px solid var(--ok-line);background:var(--ok-bg);border-radius:6px;padding:14px 16px;margin:28px 0 8px;font-size:14px}
+  section.tshoot{margin-top:42px}
+  section.tshoot>h2{font-size:18px;font-weight:600;margin:0 0 4px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+  details{border-bottom:1px solid var(--line)}
+  summary{cursor:pointer;padding:13px 2px;font-weight:600;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:9px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"+";color:var(--muted);font-weight:600;width:12px}
+  details[open] summary::before{content:"–"}
+  details .body{padding:0 0 16px 21px;color:var(--muted);font-size:14px}
+  details .body b{color:var(--text);font-weight:600}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+
+  @media (max-width:820px){
+    .layout{grid-template-columns:1fr}
+    nav.toc{display:none}
+    main{padding:28px 22px 64px}
+  }
+</style>
+</head>
+<body>
+
+  <div id="home">
+    <div class="home-card">
+      <div class="home-brand">Caspra Viewer · Add-in</div>
+      <h1 id="homeTitle"></h1>
+      <p id="homeDesc" class="home-desc"></p>
+      <p id="homeIntro" class="home-intro"></p>
+
+      <div class="field">
+        <label id="lblExplain" for="selExplain"></label>
+        <p id="helpExplain" class="field-help"></p>
+        <select id="selExplain">
+          <option value="pt">Português</option>
+          <option value="es">Español</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label id="lblSystem" for="selSystem"></label>
+        <p id="helpSystem" class="field-help"></p>
+        <select id="selSystem">
+          <option value="pt">Português</option>
+          <option value="es">Español</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+
+      <div id="homeExample" class="home-example"></div>
+      <button id="startBtn" class="start-btn"></button>
+    </div>
+  </div>
+
+  <div id="guide" hidden></div>
+
+<script>
+/* ===== Nomes de interface (Windows + PowerPoint) por idioma do sistema ===== */
+const UI = {
+  pt:{fileExplorer:"Explorador de Arquivos",showMore:"Mostrar mais opções",properties:"Propriedades",sharingTab:"Compartilhamento",advancedSharing:"Compartilhamento Avançado…",shareThisFolder:"Compartilhar esta pasta",networkPath:"Caminho de Rede",notShared:"Não compartilhado",shareSimple:"Compartilhar",ok:"OK",file:"Arquivo",options:"Opções",trustCenter:"Central de Confiabilidade",trustCenterSettings:"Configurações da Central de Confiabilidade…",trustedCatalogs:"Catálogos de Suplementos Confiáveis",catalogUrl:"URL do catálogo",addCatalog:"Adicionar Catálogo",showInMenu:"Mostrar no Menu",homeTab:"Página Inicial",addIns:"Suplementos",moreAddIns:"Mais Suplementos",myAddIns:"Meus Suplementos",sharedFolder:"Pasta Compartilhada",addBtn:"Adicionar"},
+  es:{fileExplorer:"Explorador de archivos",showMore:"Mostrar más opciones",properties:"Propiedades",sharingTab:"Compartir",advancedSharing:"Uso compartido avanzado…",shareThisFolder:"Compartir esta carpeta",networkPath:"Ruta de red",notShared:"No compartido",shareSimple:"Compartir",ok:"Aceptar",file:"Archivo",options:"Opciones",trustCenter:"Centro de confianza",trustCenterSettings:"Configuración del Centro de confianza…",trustedCatalogs:"Catálogos de complementos de confianza",catalogUrl:"Dirección URL del catálogo",addCatalog:"Agregar catálogo",showInMenu:"Mostrar en el menú",homeTab:"Inicio",addIns:"Complementos",moreAddIns:"Más complementos",myAddIns:"Mis complementos",sharedFolder:"Carpeta compartida",addBtn:"Agregar"},
+  en:{fileExplorer:"File Explorer",showMore:"Show more options",properties:"Properties",sharingTab:"Sharing",advancedSharing:"Advanced Sharing…",shareThisFolder:"Share this folder",networkPath:"Network Path",notShared:"Not shared",shareSimple:"Share",ok:"OK",file:"File",options:"Options",trustCenter:"Trust Center",trustCenterSettings:"Trust Center Settings…",trustedCatalogs:"Trusted Add-in Catalogs",catalogUrl:"Catalog Url",addCatalog:"Add Catalog",showInMenu:"Show in Menu",homeTab:"Home",addIns:"Add-ins",moreAddIns:"More Add-ins",myAddIns:"My Add-ins",sharedFolder:"Shared Folder",addBtn:"Add"}
+};
+
+const NATIVE = {pt:"Português",es:"Español",en:"English"};
+
+/* URL do arquivo de manifesto para download.
+   Relativo = funciona quando o HTML e o XML estão na mesma pasta (inclusive no S3).
+   Para apontar a uma URL fixa do AWS, troque por algo como:
+   const MANIFEST_URL = "https://SEU-BUCKET.s3.amazonaws.com/caspra-viewer-manifest.xml"; */
+const MANIFEST_URL = "caspra-viewer-manifest.xml";
+
+/* ===== Texto explicativo por idioma da explicação. {{chave}} = nome de interface ===== */
+const STR = {
+  pt:{
+    home:{title:"Antes de começar",desc:"O <b>Caspra Viewer</b> é um add-in que exibe a página <b>caspralabs.com</b> dentro de um slide do PowerPoint.",intro:"Escolha dois idiomas para personalizar o guia.",
+      lblExplain:"Idioma da explicação",helpExplain:"O idioma em que o passo a passo será escrito.",
+      lblSystem:"Idioma do seu computador",helpSystem:"O idioma em que o Windows e o PowerPoint estão instalados. Os nomes de botões e menus aparecerão exatamente como na sua tela.",
+      example:"<b>Exemplo:</b> se você é português mas o computador está em inglês, a explicação fica em português e os nomes dos comandos em inglês.",
+      start:"Abrir o guia"},
+    copy:"Copiar",copied:"Copiado",dl:"Baixar",changeLang:"Alterar idiomas",barExplain:"Explicação",barSystem:"Sistema",
+    breadcrumb:["Caspra Viewer","Add-in para PowerPoint","Guia de instalação"],
+    h1:"Instalar o Caspra Viewer no PowerPoint",
+    lede:"O <b>Caspra Viewer</b> é um add-in que exibe a página <b>caspralabs.com</b> dentro de um slide do PowerPoint. Este guia mostra como instalá-lo em uma estação de trabalho Windows.",
+    facts:["Tempo estimado: <b>~3 minutos</b>","Sistema: <b>Windows</b>","Versão: <b>PowerPoint 365 / 2016+</b>"],
+    prereqTitle:"Pré-requisitos",
+    prereq:"PowerPoint do Microsoft 365 (ou 2016 em diante), logado na conta, e o arquivo <code>caspra-viewer-manifest.xml</code> incluído neste pacote. O procedimento é executado localmente em cada máquina; não há acesso a outros computadores.",
+    tocTitle:"Nesta página",stepWord:"Passo",tshootTitle:"Solução de problemas",
+    tocSteps:["Criar a pasta","Compartilhar a pasta","Registrar no PowerPoint","Reiniciar o PowerPoint","Inserir o add-in"],
+    steps:[
+      {title:"Criar a pasta",body:[
+        {ol:[
+          {t:"Abra o {{fileExplorer}}."},
+          {t:"Crie uma pasta na raiz do disco C com o nome <code>AddinShare</code>:",path:"C:\\AddinShare"},
+          {t:"Copie o arquivo <code>caspra-viewer-manifest.xml</code> para dentro dessa pasta.",download:true}
+        ]}
+      ]},
+      {title:"Compartilhar a pasta",body:[
+        {ol:[
+          {t:"Clique com o <b>botão direito</b> na pasta <code>AddinShare</code>. No Windows 11, selecione antes {{showMore}}."},
+          {t:"Acesse {{properties}} → aba {{sharingTab}}."},
+          {t:"Clique em {{advancedSharing}} (botão inferior, com o ícone de escudo)."},
+          {t:"Marque {{shareThisFolder}} e confirme com {{ok}}."}
+        ]},
+        {p:"Na aba {{sharingTab}} será exibido um {{networkPath}} no formato:"},
+        {path:"\\\\NOME-DO-SEU-PC\\AddinShare"},
+        {sub:"Anote esse caminho — ele será usado no Passo 3. Se permanecer como “{{notShared}}”, repita o {{advancedSharing}}."}
+      ]},
+      {title:"Registrar a pasta no PowerPoint",body:[
+        {ol:[
+          {t:"Abra o <b>PowerPoint</b>."},
+          {t:"Acesse {{file}} → {{options}}."},
+          {t:"Selecione {{trustCenter}} → {{trustCenterSettings}}."},
+          {t:"Abra {{trustedCatalogs}}."},
+          {t:"No campo {{catalogUrl}}, cole o caminho de rede do Passo 2."},
+          {t:"Clique em {{addCatalog}} e marque {{showInMenu}} na linha incluída."},
+          {t:"Confirme com {{ok}} em ambas as janelas."}
+        ]}
+      ]},
+      {title:"Reiniciar o PowerPoint",body:[
+        {p:"Feche o PowerPoint <b>completamente</b> e abra novamente. O catálogo só é carregado após o reinício."}
+      ]},
+      {title:"Inserir o add-in",body:[
+        {ol:[
+          {t:"Na aba {{homeTab}}, clique em {{addIns}}."},
+          {t:"Selecione {{moreAddIns}} (ou o menu de três pontos)."},
+          {t:"Abra a aba {{myAddIns}}."},
+          {t:"Na lateral, escolha a categoria {{sharedFolder}}."},
+          {t:"Selecione <b>Caspra Viewer</b> e clique em {{addBtn}}."}
+        ]}
+      ]}
+    ],
+    result:"<b>Resultado:</b> o add-in é inserido como um objeto no slide. O redimensionamento é feito arrastando as bordas, como em qualquer caixa.",
+    tshoot:[
+      {q:"O add-in não aparece na {{sharedFolder}}",a:"Verifique: (1) o PowerPoint foi <b>reiniciado</b> após o Passo 3; (2) a pasta está <b>efetivamente compartilhada</b> (o {{networkPath}} não pode estar “{{notShared}}”); (3) a opção {{showInMenu}} está marcada."},
+      {q:"O botão {{addIns}} não está na faixa de opções",a:"Nas versões recentes, o botão fica na aba {{homeTab}}, à direita da faixa de opções."},
+      {q:"O site não carrega dentro do add-in",a:"O endereço precisa usar <code>https://</code>. Alguns sites bloqueiam a exibição dentro de outros aplicativos e não carregam — trata-se de uma restrição do site, não da instalação."},
+      {q:"O Windows pede usuário e senha ao compartilhar",a:"Utilize o botão {{advancedSharing}} (Passo 2). O botão {{shareSimple}} simples solicita usuários e não é necessário neste procedimento."},
+      {q:"Limitações conhecidas",a:"O add-in funciona enquanto está ativo no PowerPoint e com conexão à internet. Na exportação do slide para PDF, ou quando o arquivo é aberto por alguém sem o add-in instalado, o conteúdo não é exibido."}
+    ],
+    footer:'Caspra Viewer · provedor: Oidux · Suporte: <a href="https://caspralabs.com/">caspralabs.com</a>'
+  },
+
+  es:{
+    home:{title:"Antes de empezar",desc:"<b>Caspra Viewer</b> es un complemento que muestra la página <b>caspralabs.com</b> dentro de una diapositiva de PowerPoint.",intro:"Elija dos idiomas para personalizar la guía.",
+      lblExplain:"Idioma de la explicación",helpExplain:"El idioma en que se escribirá el paso a paso.",
+      lblSystem:"Idioma de su ordenador",helpSystem:"El idioma en que están instalados Windows y PowerPoint. Los nombres de botones y menús aparecerán tal como en su pantalla.",
+      example:"<b>Ejemplo:</b> si usted es español pero el ordenador está en inglés, la explicación queda en español y los nombres de los comandos en inglés.",
+      start:"Abrir la guía"},
+    copy:"Copiar",copied:"Copiado",dl:"Descargar",changeLang:"Cambiar idiomas",barExplain:"Explicación",barSystem:"Sistema",
+    breadcrumb:["Caspra Viewer","Complemento para PowerPoint","Guía de instalación"],
+    h1:"Instalar Caspra Viewer en PowerPoint",
+    lede:"<b>Caspra Viewer</b> es un complemento que muestra la página <b>caspralabs.com</b> dentro de una diapositiva de PowerPoint. Esta guía explica cómo instalarlo en una estación de trabajo Windows.",
+    facts:["Tiempo estimado: <b>~3 minutos</b>","Sistema: <b>Windows</b>","Versión: <b>PowerPoint 365 / 2016+</b>"],
+    prereqTitle:"Requisitos previos",
+    prereq:"PowerPoint de Microsoft 365 (o 2016 en adelante), con sesión iniciada, y el archivo <code>caspra-viewer-manifest.xml</code> incluido en este paquete. El procedimiento se ejecuta localmente en cada equipo; no se accede a otros ordenadores.",
+    tocTitle:"En esta página",stepWord:"Paso",tshootTitle:"Solución de problemas",
+    tocSteps:["Crear la carpeta","Compartir la carpeta","Registrar en PowerPoint","Reiniciar PowerPoint","Insertar el complemento"],
+    steps:[
+      {title:"Crear la carpeta",body:[
+        {ol:[
+          {t:"Abra el {{fileExplorer}}."},
+          {t:"Cree una carpeta en la raíz del disco C con el nombre <code>AddinShare</code>:",path:"C:\\AddinShare"},
+          {t:"Copie el archivo <code>caspra-viewer-manifest.xml</code> dentro de esa carpeta.",download:true}
+        ]}
+      ]},
+      {title:"Compartir la carpeta",body:[
+        {ol:[
+          {t:"Haga clic con el <b>botón derecho</b> en la carpeta <code>AddinShare</code>. En Windows 11, seleccione antes {{showMore}}."},
+          {t:"Acceda a {{properties}} → pestaña {{sharingTab}}."},
+          {t:"Haga clic en {{advancedSharing}} (botón inferior, con el icono de escudo)."},
+          {t:"Marque {{shareThisFolder}} y confirme con {{ok}}."}
+        ]},
+        {p:"En la pestaña {{sharingTab}} se mostrará una {{networkPath}} con el formato:"},
+        {path:"\\\\NOMBRE-DE-SU-PC\\AddinShare"},
+        {sub:"Anote esa ruta — se usará en el Paso 3. Si sigue como “{{notShared}}”, repita {{advancedSharing}}."}
+      ]},
+      {title:"Registrar la carpeta en PowerPoint",body:[
+        {ol:[
+          {t:"Abra <b>PowerPoint</b>."},
+          {t:"Acceda a {{file}} → {{options}}."},
+          {t:"Seleccione {{trustCenter}} → {{trustCenterSettings}}."},
+          {t:"Abra {{trustedCatalogs}}."},
+          {t:"En el campo {{catalogUrl}}, pegue la ruta de red del Paso 2."},
+          {t:"Haga clic en {{addCatalog}} y marque {{showInMenu}} en la línea agregada."},
+          {t:"Confirme con {{ok}} en ambas ventanas."}
+        ]}
+      ]},
+      {title:"Reiniciar PowerPoint",body:[
+        {p:"Cierre PowerPoint <b>por completo</b> y vuelva a abrirlo. El catálogo solo se carga tras reiniciar."}
+      ]},
+      {title:"Insertar el complemento",body:[
+        {ol:[
+          {t:"En la pestaña {{homeTab}}, haga clic en {{addIns}}."},
+          {t:"Seleccione {{moreAddIns}} (o el menú de tres puntos)."},
+          {t:"Abra la pestaña {{myAddIns}}."},
+          {t:"En el lateral, elija la categoría {{sharedFolder}}."},
+          {t:"Seleccione <b>Caspra Viewer</b> y haga clic en {{addBtn}}."}
+        ]}
+      ]}
+    ],
+    result:"<b>Resultado:</b> el complemento se inserta como un objeto en la diapositiva. El cambio de tamaño se hace arrastrando los bordes, como en cualquier cuadro.",
+    tshoot:[
+      {q:"El complemento no aparece en {{sharedFolder}}",a:"Compruebe: (1) PowerPoint se <b>reinició</b> tras el Paso 3; (2) la carpeta está <b>realmente compartida</b> (la {{networkPath}} no puede estar “{{notShared}}”); (3) la opción {{showInMenu}} está marcada."},
+      {q:"El botón {{addIns}} no está en la cinta de opciones",a:"En las versiones recientes, el botón está en la pestaña {{homeTab}}, a la derecha de la cinta."},
+      {q:"El sitio no se carga dentro del complemento",a:"La dirección debe usar <code>https://</code>. Algunos sitios bloquean su visualización dentro de otras aplicaciones y no se cargan — es una restricción del sitio, no de la instalación."},
+      {q:"Windows pide usuario y contraseña al compartir",a:"Utilice el botón {{advancedSharing}} (Paso 2). El botón {{shareSimple}} simple solicita usuarios y no es necesario en este procedimiento."},
+      {q:"Limitaciones conocidas",a:"El complemento funciona mientras está activo en PowerPoint y con conexión a internet. Al exportar la diapositiva a PDF, o cuando el archivo lo abre alguien sin el complemento instalado, el contenido no se muestra."}
+    ],
+    footer:'Caspra Viewer · proveedor: Oidux · Soporte: <a href="https://caspralabs.com/">caspralabs.com</a>'
+  },
+
+  en:{
+    home:{title:"Before you start",desc:"<b>Caspra Viewer</b> is an add-in that displays the <b>caspralabs.com</b> page inside a PowerPoint slide.",intro:"Choose two languages to personalize the guide.",
+      lblExplain:"Explanation language",helpExplain:"The language the step-by-step will be written in.",
+      lblSystem:"Your computer's language",helpSystem:"The language Windows and PowerPoint are installed in. Button and menu names will appear exactly as on your screen.",
+      example:"<b>Example:</b> if you are Portuguese but your computer is in English, the explanation stays in Portuguese and the command names appear in English.",
+      start:"Open the guide"},
+    copy:"Copy",copied:"Copied",dl:"Download",changeLang:"Change languages",barExplain:"Explanation",barSystem:"System",
+    breadcrumb:["Caspra Viewer","PowerPoint add-in","Installation guide"],
+    h1:"Install Caspra Viewer in PowerPoint",
+    lede:"<b>Caspra Viewer</b> is an add-in that displays the <b>caspralabs.com</b> page inside a PowerPoint slide. This guide shows how to install it on a Windows workstation.",
+    facts:["Estimated time: <b>~3 minutes</b>","System: <b>Windows</b>","Version: <b>PowerPoint 365 / 2016+</b>"],
+    prereqTitle:"Prerequisites",
+    prereq:"Microsoft 365 PowerPoint (or 2016 and later), signed in, and the <code>caspra-viewer-manifest.xml</code> file included in this package. The procedure runs locally on each machine; no other computers are accessed.",
+    tocTitle:"On this page",stepWord:"Step",tshootTitle:"Troubleshooting",
+    tocSteps:["Create the folder","Share the folder","Register in PowerPoint","Restart PowerPoint","Insert the add-in"],
+    steps:[
+      {title:"Create the folder",body:[
+        {ol:[
+          {t:"Open {{fileExplorer}}."},
+          {t:"Create a folder at the root of the C drive named <code>AddinShare</code>:",path:"C:\\AddinShare"},
+          {t:"Copy the <code>caspra-viewer-manifest.xml</code> file into that folder.",download:true}
+        ]}
+      ]},
+      {title:"Share the folder",body:[
+        {ol:[
+          {t:"Right-click the <code>AddinShare</code> folder. On Windows 11, select {{showMore}} first."},
+          {t:"Go to {{properties}} → {{sharingTab}} tab."},
+          {t:"Click {{advancedSharing}} (lower button, with the shield icon)."},
+          {t:"Check {{shareThisFolder}} and confirm with {{ok}}."}
+        ]},
+        {p:"On the {{sharingTab}} tab a {{networkPath}} will be shown in the format:"},
+        {path:"\\\\YOUR-PC-NAME\\AddinShare"},
+        {sub:"Note this path — it will be used in Step 3. If it stays as “{{notShared}}”, repeat {{advancedSharing}}."}
+      ]},
+      {title:"Register the folder in PowerPoint",body:[
+        {ol:[
+          {t:"Open <b>PowerPoint</b>."},
+          {t:"Go to {{file}} → {{options}}."},
+          {t:"Select {{trustCenter}} → {{trustCenterSettings}}."},
+          {t:"Open {{trustedCatalogs}}."},
+          {t:"In the {{catalogUrl}} field, paste the network path from Step 2."},
+          {t:"Click {{addCatalog}} and check {{showInMenu}} on the added row."},
+          {t:"Confirm with {{ok}} in both windows."}
+        ]}
+      ]},
+      {title:"Restart PowerPoint",body:[
+        {p:"Close PowerPoint <b>completely</b> and open it again. The catalog is only loaded after a restart."}
+      ]},
+      {title:"Insert the add-in",body:[
+        {ol:[
+          {t:"On the {{homeTab}} tab, click {{addIns}}."},
+          {t:"Select {{moreAddIns}} (or the three-dots menu)."},
+          {t:"Open the {{myAddIns}} tab."},
+          {t:"On the side, choose the {{sharedFolder}} category."},
+          {t:"Select <b>Caspra Viewer</b> and click {{addBtn}}."}
+        ]}
+      ]}
+    ],
+    result:"<b>Result:</b> the add-in is inserted as an object on the slide. Resize it by dragging the edges, like any box.",
+    tshoot:[
+      {q:"The add-in doesn't appear under {{sharedFolder}}",a:"Check: (1) PowerPoint was <b>restarted</b> after Step 3; (2) the folder is <b>actually shared</b> (the {{networkPath}} must not read “{{notShared}}”); (3) the {{showInMenu}} option is checked."},
+      {q:"The {{addIns}} button isn't on the ribbon",a:"In recent versions, the button is on the {{homeTab}} tab, at the right of the ribbon."},
+      {q:"The site won't load inside the add-in",a:"The address must use <code>https://</code>. Some sites block being displayed inside other applications and won't load — this is a site restriction, not an installation issue."},
+      {q:"Windows asks for a username and password when sharing",a:"Use the {{advancedSharing}} button (Step 2). The simple {{shareSimple}} button asks for users and isn't needed for this procedure."},
+      {q:"Known limitations",a:"The add-in works while it's active in PowerPoint and connected to the internet. When exporting the slide to PDF, or when the file is opened by someone without the add-in installed, the content is not shown."}
+    ],
+    footer:'Caspra Viewer · provider: Oidux · Support: <a href="https://caspralabs.com/">caspralabs.com</a>'
+  }
+};
+
+/* ===== Helpers ===== */
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function applyUI(str,sys){
+  return str.replace(/\{\{(\w+)\}\}/g,function(_,k){
+    var v=(UI[sys]&&UI[sys][k])||k;
+    return '<span class="ui">'+v+'</span>';
+  });
+}
+function pathWidget(val,S){
+  return '<div class="path"><span class="val">'+esc(val)+'</span>'
+       + '<button data-copy="'+esc(val)+'">'+S.copy+'</button></div>';
+}
+function downloadWidget(S){
+  return '<a class="dlbtn" href="'+esc(MANIFEST_URL)+'" download="caspra-viewer-manifest.xml">'
+       + '<span class="dlicon">&#x2913;</span>'+S.dl+' <code>caspra-viewer-manifest.xml</code></a>';
+}
+
+/* ===== Home (segue o idioma da explicação) ===== */
+function renderHome(){
+  var ex=document.getElementById('selExplain').value;
+  var H=STR[ex].home;
+  document.getElementById('homeTitle').textContent=H.title;
+  document.getElementById('homeDesc').innerHTML=H.desc;
+  document.getElementById('homeIntro').textContent=H.intro;
+  document.getElementById('lblExplain').textContent=H.lblExplain;
+  document.getElementById('helpExplain').textContent=H.helpExplain;
+  document.getElementById('lblSystem').textContent=H.lblSystem;
+  document.getElementById('helpSystem').textContent=H.helpSystem;
+  document.getElementById('homeExample').innerHTML=H.example;
+  document.getElementById('startBtn').textContent=H.start;
+  document.documentElement.lang=ex;
+}
+
+/* ===== Guia ===== */
+function renderGuide(ex,sys){
+  var S=STR[ex];
+  var crumbs=S.breadcrumb.map(function(c,i){
+    return (i===0?'<strong>'+c+'</strong>':'<span>'+c+'</span>')
+         + (i<S.breadcrumb.length-1?'<span class="sep">/</span>':'');
+  }).join('');
+
+  var toc='<ol>'+S.tocSteps.map(function(t,i){
+    return '<li><a href="#s'+(i+1)+'">'+(i+1)+'. '+t+'</a></li>';
+  }).join('')+'<li><a href="#tshoot">'+S.tshootTitle+'</a></li></ol>';
+
+  var facts=S.facts.map(function(f){return '<div>'+f+'</div>';}).join('');
+
+  var steps=S.steps.map(function(st,i){
+    var n=i+1;
+    var body=st.body.map(function(b){
+      if(b.ol){
+        return '<ol class="steps">'+b.ol.map(function(it){
+          return '<li>'+applyUI(it.t,sys)+(it.path?pathWidget(it.path,S):'')+(it.download?downloadWidget(S):'')+'</li>';
+        }).join('')+'</ol>';
+      }
+      if(b.p) return '<p>'+applyUI(b.p,sys)+'</p>';
+      if(b.sub) return '<p class="sub">'+applyUI(b.sub,sys)+'</p>';
+      if(b.path) return pathWidget(b.path,S);
+      return '';
+    }).join('');
+    return '<section class="block" id="s'+n+'">'
+         + '<h2 class="step"><span class="n">'+S.stepWord+' '+n+'</span>'+st.title+'</h2>'
+         + body+'</section>';
+  }).join('');
+
+  var tshoot=S.tshoot.map(function(d){
+    return '<details><summary>'+applyUI(d.q,sys)+'</summary>'
+         + '<div class="body">'+applyUI(d.a,sys)+'</div></details>';
+  }).join('');
+
+  document.getElementById('guide').innerHTML=
+    '<div class="topbar"><div class="inner">'
+    + '<button class="change-btn" id="changeLang">&#8592; '+S.changeLang+'</button>'
+    + '<span class="sep">/</span>'+crumbs
+    + '<span class="langtag">'+S.barExplain+': <b>'+NATIVE[ex]+'</b> · '+S.barSystem+': <b>'+NATIVE[sys]+'</b></span>'
+    + '</div></div>'
+    + '<div class="layout">'
+    + '<nav class="toc"><p class="lbl">'+S.tocTitle+'</p>'+toc+'</nav>'
+    + '<main>'
+    + '<h1>'+S.h1+'</h1>'
+    + '<p class="lede">'+S.lede+'</p>'
+    + '<div class="factbar">'+facts+'</div>'
+    + '<div class="note"><span class="h">'+S.prereqTitle+'</span><p>'+S.prereq+'</p></div>'
+    + steps
+    + '<div class="result">'+applyUI(S.result,sys)+'</div>'
+    + '<section class="tshoot" id="tshoot"><h2>'+S.tshootTitle+'</h2>'+tshoot+'</section>'
+    + '<footer>'+S.footer+'</footer>'
+    + '</main></div>';
+
+  // copiar
+  document.querySelectorAll('#guide button[data-copy]').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(function(){
+        btn.textContent=S.copied;btn.classList.add('done');
+        setTimeout(function(){btn.textContent=S.copy;btn.classList.remove('done');},1500);
+      });
+    });
+  });
+  // voltar para a home
+  document.getElementById('changeLang').addEventListener('click',function(){
+    document.getElementById('guide').hidden=true;
+    document.getElementById('home').style.display='flex';
+    window.scrollTo(0,0);
+  });
+  document.documentElement.lang=ex;
+}
+
+/* ===== Inicialização ===== */
+(function(){
+  var n=(navigator.language||'pt').slice(0,2).toLowerCase();
+  if(!STR[n]) n='pt';
+  document.getElementById('selExplain').value=n;
+  document.getElementById('selSystem').value=n;
+  renderHome();
+  document.getElementById('selExplain').addEventListener('change',renderHome);
+  document.getElementById('startBtn').addEventListener('click',function(){
+    var ex=document.getElementById('selExplain').value;
+    var sys=document.getElementById('selSystem').value;
+    renderGuide(ex,sys);
+    document.getElementById('home').style.display='none';
+    document.getElementById('guide').hidden=false;
+    window.scrollTo(0,0);
+  });
+})();
+</script>
+</body>
+</html>
