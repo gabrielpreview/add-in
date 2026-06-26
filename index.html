@@ -91,9 +91,31 @@
   .note .h{font-weight:600;display:block;margin-bottom:2px}
   .note p{margin:0}
 
-  .block{border:1px solid var(--line);border-left:3px solid var(--accent-line);border-radius:8px;padding:0 22px 20px;margin:20px 0 0;scroll-margin-top:18px}
-  h2.step{font-size:17px;font-weight:600;margin:0 -22px 0;padding:14px 22px;border-bottom:1px solid var(--line);background:var(--panel);border-radius:0 8px 0 0;display:flex;align-items:center;gap:12px}
-  h2.step .n{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 9px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;border-radius:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .progress{position:sticky;top:0;z-index:20;background:var(--bg);margin:0 0 22px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .progress-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .progress-count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .progress-track{height:7px;background:var(--panel);border:1px solid var(--line);border-radius:99px;overflow:hidden}
+  .progress-fill{height:100%;width:0;background:var(--accent);transition:width .35s ease}
+  .progress-fill.full{background:#1a7f43}
+
+  .block{border:1px solid var(--line);border-left:3px solid var(--accent-line);border-radius:8px;margin:14px 0 0;scroll-margin-top:78px;overflow:hidden}
+  .block.done{border-left-color:#1a7f43}
+  .step-head{width:100%;border:0;background:var(--panel);cursor:pointer;display:flex;align-items:center;gap:12px;padding:13px 16px;font:inherit;color:var(--text);text-align:left}
+  .step-head:hover{background:#edeff2}
+  .step-title{font-size:16px;font-weight:600}
+  .step-head .n{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 9px;background:var(--accent);color:#fff;font-size:12.5px;font-weight:700;border-radius:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .step-head .n.done{background:#1a7f43;padding:0;min-width:26px;font-size:15px}
+  .chev{margin-left:auto;color:var(--muted);font-size:22px;line-height:1;transition:transform .25s}
+  .block.open .chev{transform:rotate(90deg)}
+  .step-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .block.open .step-body{max-height:2200px}
+  .step-body-inner{padding:6px 22px 20px}
+  .step-actions{margin-top:20px;display:flex;justify-content:flex-end}
+  .done-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--accent);background:var(--bg);color:var(--accent);font:600 14px "Segoe UI",sans-serif;border-radius:7px;padding:9px 16px;cursor:pointer}
+  .done-btn:hover{background:var(--accent);color:#fff}
+  .done-btn .dchk{font-size:13px}
+  .done-btn.is-done{background:#1a7f43;border-color:#1a7f43;color:#fff;cursor:default}
   ol.steps{margin:14px 0 0;padding-left:22px}
   ol.steps>li{margin:8px 0;padding-left:4px}
   ol.steps>li::marker{color:var(--muted);font-variant-numeric:tabular-nums}
@@ -200,6 +222,7 @@ const STR = {
     prereqTitle:"Pré-requisitos",
     prereq:"PowerPoint do Microsoft 365 (ou 2016 em diante), logado na conta, e o arquivo <code>caspra-viewer-manifest.xml</code> incluído neste pacote. O procedimento é executado localmente em cada máquina; não há acesso a outros computadores.",
     tocTitle:"Nesta página",stepWord:"Passo",tshootTitle:"Solução de problemas",
+    progressLabel:"Seu progresso",progressCount:"{n} de {total} concluídos",doneBtn:"Marcar como concluído",doneState:"Concluído",
     tocSteps:["Criar a pasta","Compartilhar a pasta","Registrar no PowerPoint","Reiniciar o PowerPoint","Inserir o add-in"],
     steps:[
       {title:"Criar a pasta",body:[
@@ -269,6 +292,7 @@ const STR = {
     prereqTitle:"Requisitos previos",
     prereq:"PowerPoint de Microsoft 365 (o 2016 en adelante), con sesión iniciada, y el archivo <code>caspra-viewer-manifest.xml</code> incluido en este paquete. El procedimiento se ejecuta localmente en cada equipo; no se accede a otros ordenadores.",
     tocTitle:"En esta página",stepWord:"Paso",tshootTitle:"Solución de problemas",
+    progressLabel:"Su progreso",progressCount:"{n} de {total} completados",doneBtn:"Marcar como hecho",doneState:"Completado",
     tocSteps:["Crear la carpeta","Compartir la carpeta","Registrar en PowerPoint","Reiniciar PowerPoint","Insertar el complemento"],
     steps:[
       {title:"Crear la carpeta",body:[
@@ -338,6 +362,7 @@ const STR = {
     prereqTitle:"Prerequisites",
     prereq:"Microsoft 365 PowerPoint (or 2016 and later), signed in, and the <code>caspra-viewer-manifest.xml</code> file included in this package. The procedure runs locally on each machine; no other computers are accessed.",
     tocTitle:"On this page",stepWord:"Step",tshootTitle:"Troubleshooting",
+    progressLabel:"Your progress",progressCount:"{n} of {total} completed",doneBtn:"Mark as done",doneState:"Done",
     tocSteps:["Create the folder","Share the folder","Register in PowerPoint","Restart PowerPoint","Insert the add-in"],
     steps:[
       {title:"Create the folder",body:[
@@ -454,9 +479,19 @@ function renderGuide(ex,sys){
       if(b.path) return pathWidget(b.path,S);
       return '';
     }).join('');
-    return '<section class="block" id="s'+n+'">'
-         + '<h2 class="step"><span class="n">'+S.stepWord+' '+n+'</span>'+st.title+'</h2>'
-         + body+'</section>';
+    var openClass=(n===1)?' open':'';
+    return '<section class="block'+openClass+'" id="s'+n+'">'
+         + '<button type="button" class="step-head" data-toggle="'+n+'">'
+         +   '<span class="n">'+S.stepWord+' '+n+'</span>'
+         +   '<span class="step-title">'+st.title+'</span>'
+         +   '<span class="chev">&#8250;</span>'
+         + '</button>'
+         + '<div class="step-body"><div class="step-body-inner">'
+         +   body
+         +   '<div class="step-actions"><button type="button" class="done-btn" data-done="'+n+'">'
+         +     '<span class="dchk">&#10003;</span><span class="dtxt">'+S.doneBtn+'</span></button></div>'
+         + '</div></div>'
+         + '</section>';
   }).join('');
 
   var tshoot=S.tshoot.map(function(d){
@@ -477,6 +512,10 @@ function renderGuide(ex,sys){
     + '<p class="lede">'+S.lede+'</p>'
     + '<div class="factbar">'+facts+'</div>'
     + '<div class="note"><span class="h">'+S.prereqTitle+'</span><p>'+S.prereq+'</p></div>'
+    + '<div class="progress"><div class="progress-top">'
+    +   '<span class="progress-label">'+S.progressLabel+'</span>'
+    +   '<span class="progress-count" id="progCount"></span></div>'
+    +   '<div class="progress-track"><div class="progress-fill" id="progFill"></div></div></div>'
     + steps
     + '<div class="result">'+applyUI(S.result,sys)+'</div>'
     + '<section class="tshoot" id="tshoot"><h2>'+S.tshootTitle+'</h2>'+tshoot+'</section>'
@@ -492,6 +531,57 @@ function renderGuide(ex,sys){
       });
     });
   });
+  // ===== Progresso + accordion =====
+  var total=S.steps.length, done={};
+  function updateProgress(){
+    var c=0; for(var k in done){ if(done[k]) c++; }
+    var fill=document.getElementById('progFill');
+    fill.style.width=(c/total*100)+'%';
+    fill.classList.toggle('full', c===total);
+    document.getElementById('progCount').textContent=
+      S.progressCount.replace('{n}',c).replace('{total}',total);
+  }
+  function setOpen(n,open){
+    var sec=document.getElementById('s'+n); if(!sec) return;
+    if(open===undefined) sec.classList.toggle('open');
+    else sec.classList.toggle('open',open);
+  }
+  function markDone(n){
+    if(done[n]) return;
+    done[n]=true;
+    var sec=document.getElementById('s'+n);
+    sec.classList.add('done');
+    var badge=sec.querySelector('.n'); badge.classList.add('done'); badge.innerHTML='&#10003;';
+    var btn=sec.querySelector('.done-btn'); btn.classList.add('is-done');
+    btn.querySelector('.dtxt').textContent=S.doneState;
+    updateProgress();
+    setOpen(n+1<=total?n+1:n,true);
+    var prevBody=sec.querySelector('.step-body');
+    setOpen(n,false);
+    if(n<total){
+      var next=document.getElementById('s'+(n+1));
+      // só rola depois que o passo atual termina de fechar (senão a posição "passa")
+      var scrolled=false;
+      var go=function(){ if(scrolled) return; scrolled=true;
+        next.scrollIntoView({behavior:'smooth',block:'start'}); };
+      prevBody.addEventListener('transitionend',go,{once:true});
+      setTimeout(go,360); // fallback caso o transitionend não dispare
+    }
+  }
+  document.querySelectorAll('#guide .step-head').forEach(function(h){
+    h.addEventListener('click',function(){ setOpen(+h.getAttribute('data-toggle')); });
+  });
+  document.querySelectorAll('#guide .done-btn').forEach(function(b){
+    b.addEventListener('click',function(e){ e.stopPropagation(); markDone(+b.getAttribute('data-done')); });
+  });
+  document.querySelectorAll('#guide nav.toc a').forEach(function(a){
+    a.addEventListener('click',function(){
+      var href=a.getAttribute('href')||'';
+      if(href.indexOf('#s')===0){ var n=+href.slice(2); if(n) setOpen(n,true); }
+    });
+  });
+  updateProgress();
+
   // voltar para a home
   document.getElementById('changeLang').addEventListener('click',function(){
     document.getElementById('guide').hidden=true;
